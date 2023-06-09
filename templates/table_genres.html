@@ -1,0 +1,246 @@
+{% from "macros/modals.html" import modals %}
+{% from "macros/loader.html" import loader %}
+{% from "macros/datatable_imports.html" import style_imports %}
+
+{% extends "layout.html" %}
+
+{%- block head_content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %} 
+
+ 
+{% block main_content %}
+
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+  
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+  
+  <style>
+    .custom-cls {
+        display: inline-flex !important;
+        width: 180px !important;
+        margin-left: 25px !important;
+        right: 1em !important;
+        position: absolute;
+        height: calc(1.5em + .5rem ) !important;
+        padding-top: 0.2em !important;
+    }
+
+    
+    .dataTables_filter {
+      width: 180px !important;
+      display: inline-flex !important;
+      
+    }
+
+    div.dataTables_length {
+      width: 180px !important;
+      display: inline-flex !important;
+      margin-right: 15em !important;
+      margin-left: 5em !important;
+    }
+   
+    .dataTables_info {
+      width: fit-content !important;
+      display: inline-flex !important;
+      margin-right: 0 !important;
+    }
+   
+    div.dt-buttons {
+
+      width: fit-content !important;
+      margin-right: 1em !important;
+      
+      align-items: left !important;
+    }
+</style>
+
+
+{{loader()}}
+{{style_imports()}}
+
+  <select id = "customFilter" name="data_length" aria-controls="data" class="form-select form-select-sm form-control custom-cls">
+    <option value="Genres">Genres</option>
+    <option value="Cast">Cast</option>
+    <option value="Languages">Languages</option>
+    <option value="Year">Year</option>
+  </select> 
+
+  {% if not movies_data.empty %}
+  <table id="data" class="table table-striped" style="color: var(--accent-colour) !important;  width: 80em !important;" >
+      <thead style="overflow: scroll;">
+      <tr >
+        
+          <th style="text-transform: capitalize;">No.</th>
+          <th style="text-transform: capitalize;">Genre</th>
+        
+      </tr>
+      </thead>
+      <tbody>
+      
+      {% for i,mov in movies_data.iterrows() %}
+      {% set idx = loop.index %}
+          <tr style="color: var(--text-dark) !important;">
+          {% for c in movies_data.columns[1:] %}
+          
+          {%if c=='Genre' %}
+              <td ><a href= "{{url_for('movies',filter='genres',val=mov[c]|string)}}" style="text-decoration: none; color: inherit !important;" >{{mov[c]}}</a></td>
+            
+          {% else %}
+
+            <td style="color: var(--text-dark) !important;">{{ idx }}</td>
+          
+          {% endif %}
+            {%endfor%}
+          </tr>
+    
+      {% endfor %}
+      </tbody>
+  </table>
+  
+  {{ modals() }}
+  
+  {% else %}
+  <p class="table__empty">No movies found. :( <a href="{{ url_for('index') }}" class="link">Go back to Homepage</a></p>
+  {% endif %}
+  
+  <script>
+      $(document).ready(function () {
+
+        $('#data').DataTable({
+          "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $(nRow).css( 'cursor', 'pointer' );
+            $(nRow).click(function(){
+              var filter = $('#customFilter option:selected').val();
+              //let val = $(this).find('td:last-child')[0].innerText;
+                
+                if (filter === 'Cast')
+                {
+                  //window.location = '/movies/?filter='+filter+"&val="+aData['Id']+"&title="+aData['Value']; 
+                  window.location = '/actor/'+aData['Id']+"?title="+aData['Value']; 
+                }
+                else
+                window.location = '/movies/?filter='+filter+"&val="+aData['Value']+""; 
+            
+                return false;
+                                     });    
+            },
+       
+           columns :[
+            { data: 'Link' },
+            { data: 'Value' }, ],
+           responsive: true,
+           //scrollX:  350,
+           scrollY:  405,
+          // deferRender:    true,
+          // scroller:       true,
+          "initComplete":  ()  => {  
+          
+            $('#data').DataTable().columns.adjust().draw();
+          
+          $("#data").show();
+          
+        
+          },
+
+          language: {
+        search: "_INPUT_",
+        searchPlaceholder: "Search...",
+    },
+    buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 
+    {
+      "extend": 'colvis',
+      "text": 'Select Columns',
+      'className': 'btn btn-info',    
+    }],
+    select: true,
+      dom: 'lBfrtip',
+      fixedHeader: true,
+      lengthMenu: [
+          [10, 25, 50, 100],
+          ['10', '25', '50', '100']
+      ],
+          
+        });
+        $('#data').DataTable().buttons().container()
+              .appendTo('#dataTables_wrapper .col-md-6:eq(0)');
+              $(".buttons-html5").addClass("btn");
+      $(".buttons-html5").addClass("btn-success");
+      });
+
+    </script>
+
+{# <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script> #}
+<script type="text/javascript">
+  $(document).ready(function() {
+    var table = null;
+
+    var cols = null;
+    $("#data_filter.dataTables_filter").append($("#customFilter"));
+
+    $('select').change('click', function() {
+      //alert( $('#data').DataTable().clear(););
+      myFunction(1000);
+      $('#data').DataTable().clear();
+      var selectedItem = $('#customFilter').val()
+      
+      $.getJSON('/_get_table', {tbl_name: $('#customFilter option:selected').val()}, function(data) {
+        $("#elements").text('Loaded new table...');
+        if (table !== null) {
+          table.destroy();
+          table = null;
+          $("#data").empty();
+        }
+
+        var head_item = $('#data').DataTable().columns(0).header();
+        $(head_item).html('No.');
+       
+        var head_item = $('#data').DataTable().columns(1).header();
+        $(head_item ).html($('#Crd option:selected').val());
+        cols = $('#Crd option:selected').val();
+        
+        $('#data').DataTable().rows.add(data);
+        
+        
+      $('#data').DataTable().draw();
+       // $(".dt-row").html(data.my_table);
+        // table = $("#data").DataTable(
+        //   {
+        //     "data" : data.my_table
+        //   }
+        // );
+      });
+      
+      return false;
+    });
+
+ 
+    $(".buttons-colvis").on("click", function ()
+    {        
+      
+        var columnLinks = $(".dt-button-collection").find("a");
+       
+        if (cols!=null) {
+        $(columnLinks[0]).html('No.');
+        $(columnLinks[1]).html(cols);
+        }
+    });
+
+    
+  });
+  
+ 
+//   $('#data').on('click', 'tbody > tr > td', function ()
+// {
+//     // 'this' refers to the current <td>, if you need information out of it
+//     window.open('http://example.com');
+// });
+</script>
+
+{% endblock %}

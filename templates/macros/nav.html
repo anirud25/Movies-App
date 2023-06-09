@@ -1,0 +1,133 @@
+{% macro header(email, theme) %}
+{% from "macros/svgs.html" import moon, sun, logo %}
+{% from "macros/menu.html" import menu %}
+<header class="header">
+    <div class="nav-container">
+        
+    <!-- Sidebar (hidden by default) -->
+    {{menu()}}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display: none; width: 20%; min-width: 300px;" id="mySidebar">
+        <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
+        <a href="{{url_for('index')}}" onclick="w3_close()" class="w3-bar-item w3-button">Home</a>
+        <a href="{{url_for('display_all')}}" onclick="w3_close()" class="w3-bar-item w3-button">All Movies</a>
+        <a href="{{url_for('recommend')}}" onclick="w3_close()" class="w3-bar-item w3-button">Recommend</a>
+        <a href="{{url_for('table_filter')}}" onclick="w3_close()" class="w3-bar-item w3-button">Filter Movies</a>
+        {%if session.get('role')=='admin' %} 
+        <a href="{{url_for('admin')}}" onclick="w3_close()" class="w3-bar-item w3-button">Admin</a>
+        {%endif%}
+
+      </nav>
+
+      <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()" id="w3button">☰</div>
+
+        <a href="{{ url_for('index') }}" class="info header__logo">{{ logo() }} <span class="logo__name">MoviesDB <span class="tooltiptext">Home Page</span></span>
+        </a>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        
+        <script>
+            $( function() {
+
+                var availableTags = null;
+                $.getJSON('/_get_titles',function(data) { 
+                    
+                    availableTags =  data['values'];
+                    $( "#search" ).autocomplete({
+                        minLength: 3,
+                        source: function (request, response) {
+                            var results = $.ui.autocomplete.filter(availableTags, request.term);
+
+                            response(results.slice(0, 10));
+                        },
+                        select: function(event, ui) {  
+                            $("#search").val(ui.item.value);
+                            $("#searchForm").submit(); }
+              });
+                 } );
+                 
+              
+              $( "#search" ).on('keyup',function(e){
+                if($(".searchTerm").val() !=''){
+                    $(this).removeClass('off');
+                $(this).addClass('on');
+                $(".searchButton").removeClass('off');
+                $(".searchButton").addClass('on');
+              }
+              else {
+                $(this).removeClass('on');
+                $(this).addClass('off');
+                $(".searchButton").removeClass('on');
+                $(".searchButton").addClass('off');
+              }
+            });
+
+            $(".ui-menu-item-wrapper").bind(function(){
+                alert("HI");
+
+            });
+
+
+            } );
+
+            </script>
+       
+        <form action="{{ url_for('search')}}" id="searchForm">
+            <div class="wrap">
+                <div class="search">
+                <input type="text" placeholder="Search Movie.." name="search" class="searchTerm" id="search" required="required" >
+                <button type="submit" class="searchButton info"><span class="tooltiptext">Search</span><i class="fa fa-search"></i></button>
+           
+            </div>
+        </div>
+        </form>
+
+
+        <nav class="nav">
+                <a href="{{ url_for('toggle_theme', current_page=request.path) }}" class="nav__link">
+                <span class="info nav__item">
+                    {% if theme == "dark" %}
+                        {{ sun("nav__icon") }}
+                    {% else %}
+                        {{ moon("nav__icon") }}
+                    {% endif %}
+                    <span class="tooltiptext">Toggle Theme</span>
+                </span>
+                </a>
+            {% if not email %}
+            <a href="{{ url_for('login') }}" class="nav__link {{ 'nav__link--active' if request.path == url_for('login') }}">
+            <span class="info nav__item">Log in
+            <span class="tooltiptext">Login Now</span>
+            </span>
+            </a>
+            <a href="{{ url_for('register') }}" class="nav__link {{ 'nav__link--active' if request.path == url_for('register') }}" >
+            <span class="info nav__item">Register
+                <span class="tooltiptext">Register Now</span>
+            </span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('display_usermovies') }}" class="nav__link {{ 'nav__link--active' if request.path == url_for('display_usermovies') }}">
+            <span class="info nav__item">My Movies
+            <span class="tooltiptext">All Your Favorite Movies</span> </span>
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav__link">
+                <span class="info nav__item">Log out
+                <span class="tooltiptext">Logout From The App</span>
+                </span>
+                            </a>
+            {% endif %}
+            
+        </nav>
+
+    </div>
+</header>
+{% endmacro %}

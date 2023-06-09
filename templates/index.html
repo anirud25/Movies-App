@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% from "macros/gallery.html" import gallery %}
+{% from "macros/svgs.html" import star %}
+{% block main_content %}
+
+
+{# <link rel="stylesheet" href="{{ url_for('static', filename='css/cast_details.css') }}" />
+
+
+<h3 style="text-align:center; color: var(--accent-colour-dark)">Cast</h3>
+
+<div class="row">
+    
+  {% for m in movies %}
+    <div class="card" >
+      <img src="{{m.get('profile_path')}}"  onclick="openModal();currentSlide('{{loop.index}}')" class="hover-shadow cursor">
+    <div class="content">
+      <h4>{{m.get('name')}} </h4>
+      <p class="title" >{{m.get('character',0) or m.get('job')}}</p>
+    </div>
+    </div>
+    
+    {% endfor %}
+    {% set len = movies.__len__()%}
+</div>
+
+<div id="myModal" class="modal2">
+  
+  <div class="close2"  onclick="closeModal()">&times;</div>
+  <div class="modal-content2">
+
+    {% for m in movies %}
+    <div class="mySlides">
+      <div class="numbertext">{{loop.index}} / {{len}}</div>
+      <img src="{{m.get('profile_path')}}" class='popimg' alt="{{m.get('name')}}">
+    </div>
+    {% endfor %}
+    
+    
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+    <div class="caption-container">
+      <p id="caption" style="color: var(--accent-colour);"></p>
+    </div>
+
+    
+  </div>
+</div>
+
+
+{{gallery()}} #}
+
+
+{% endblock %}

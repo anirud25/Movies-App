@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% from "macros/menu.html" import menu %}
+{% from "macros/modals.html" import modals %}
+{% from "macros/posterpopup.html" import popup %}
+{% from "macros/datatable_imports.html" import style_imports %}
+
+{% block head_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %}
+
+{% block main_content %}
+
+    {# <div class="w3-container w3-center" style="display: flex; justify-content: center;">  
+        <h3 style="margin: 0px;">Welcome to the Movies DB </h3><br>
+    </div> #}
+
+    {% if not movies.empty %}
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main w3-content" style="max-width: 98%; ">
+      
+      <!-- First Photo Grid-->
+      <div class="w3-row-padding w3-center" style=" margin: auto auto auto auto;">
+        {% for m in movies.itertuples() %}
+        
+        <div class="w3-quarter" > 
+         
+          
+           
+          <img src ={{m.poster_path}} alt="Poster" id="poster" name="modal_img" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+    
+            <!-- The Modal -->
+          <div class="modalImg" id="img_modal">
+            <div class="close" style="position:relative; left:90%">&times;</div>
+            {#<iframe name="modal_img" class="modal_img" src=""  allowfullscreen></iframe> #}
+            <img class="modal-content" id="img01">
+          </div>
+          
+            {{popup()}}
+            
+
+          <h3><a href="{{ url_for('movie', mov_id= m.id, title= m.title) }}" > {{ m.title}} {% if m.status =='Released'%} ({{m.year }}) {%endif%}</a></h3>
+          {# <p style="overflow: hidden; padding-bottom: 1vh;">{{ m.overview }} </p> #}
+          <div>
+            <input type="checkbox" class="read-more-state-{{loop.index0}}" id="post-1" />
+          
+            <p class="read-more-wrap-{{loop.index0}}"><span class="def-wrap-{{loop.index0}}">{{' '.join(m.overview.split()[:7])}}
+            
+            <label id="read-more-label-{{loop.index0}}" for="post-1" class="blue read-more-trigger-{{loop.index0}}" >»</label>
+            </span> <span class="read-more-target-{{loop.index0}}">{{m.overview}} <label id="read-more-label-{{loop.index0}}" for="post-1" class="blue read-more-trigger-{{loop.index0}}" >«</label> </span>
+            </p>
+          </div>  
+          
+
+        {% if m.trailers != '[]' %}
+          <div class = "links">
+          <a href = {{m.trailers}} class="logo__name info header__logo" target="modal_iframe" onClick="showModal()" style="padding-top: 0.5rem; justify-content: center; height: 1.5rem; align-items: none; ">Trailer <span class="tooltiptext">View Trailer</span></a> 
+          {# <div class="popup" ><iframe max-width="inherit" height="126" src="{{m.trailers}}" class="trailer" referrerpolicy = "origin" frameborder="0" gesture="media" allow="autoplay; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe> </div> #}
+        </div>
+        {%endif%}
+      
+        <div id="modal">
+          <div class="close" onClick="hideModal();">&times;</div>
+          <iframe name="modal_iframe" class= "videoplayer" src="" referrerpolicy = "origin" frameborder="5%" gesture="media" allow="autoplay; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe>
+        </div>
+
+        <div class="bg-image"> </div>
+        
+        {{ modals() }}
+        </div>
+        {% endfor %}
+        
+      </div>
+    </div>
+    
+      <!-- Pagination -->
+      <div class="w3-center">
+        <div class="w3-bar">
+          {% if page|int > 1 %}
+          <a href="{{ url_for('movies', filter=filter,val=val) }}" class="w3-bar-item w3-button w3-hover-gold">«</a>
+          <a href="{{url_for('movies', filter=filter, page=page|int- 1, val=val)}}" class="w3-bar-item w3-button w3-hover-gold">‹</a>
+          {% endif %}
+          <a href="" class="w3-bar-item w3-gold w3-button">{{page}}</a> 
+          
+          {% if page!=last and not page|int >=last  %}
+          
+          {% for i in range(page|int+1, page|int+3)  %}
+          {% if i <= last%}
+          <a href="{{ url_for('movies', filter=filter,page=i, val=val) }}" class="w3-bar-item w3-button w3-hover-gold">{{i}}</a>
+          {%endif%}
+          {%endfor%}
+          <a href="{{ url_for('movies', filter=filter,page=page|int+ 1, val=val) }}" class="w3-bar-item w3-button w3-hover-gold">›</a>
+          <a href="{{ url_for('movies', filter=filter,page=last|int, val=val) }}" class="w3-bar-item w3-button w3-hover-gold">»</a>
+          {% endif %}
+         
+        </div>
+      </div>
+    
+      
+    <!-- End page content -->
+    </div>
+    {% else %}
+        <p class="table__empty">Page doesn't exist. <a href="{{ url_for('index') }}" class="link">Home</a></p>
+    {% endif %}
+   {{menu()}}
+
+   <script>
+    window.addEventListener('load', function () {
+    resizeCard();
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,240 @@
+{% from "macros/svgs.html" import star, pencil %}
+{% from "macros/gallery.html" import gallery %}
+{% from "macros/modals.html" import modals %}
+{% from "macros/posterpopup.html" import popup %}
+{% extends "layout.html" %}
+import Head from 'next/head'
+<Head>
+    
+</Head>
+{% block head_content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cast_details.css') }}" />
+
+{% endblock %}
+
+{% block main_content %}
+
+<div class="container" style="margin: 0; padding: 10px 100px; ">
+    {% if not movie.empty %}
+    <header class="movie__header">
+            <div class="header__row">
+                <div class="movie__name" style="display: inline-flex; flex-wrap: wrap; column-gap: 1vh;">
+                    <h1>{{ movie.title }} 
+                    {% if movie.original_title != movie.title%} / {{ movie.original_title }}
+                    {%endif%}
+                    {% if movie.year %} 
+                    <h4 style="font-size: 1.2em ;">({{movie.year}})</h4> 
+                    {%endif%}
+                    </h1> 
+                    <div class="movie__rating">
+                       
+                        {% for i in range(5) %}
+                            <a class="rating__link" href="{{ url_for('rate_movie', mov_id=movie.id, rating=i+1) }}">
+                                {{ star("star " + ("star--filled" if ratings > i else "")) }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            
+                
+            </div>
+            {% if movie.tagline %}
+            <div class="header__row"><h3 class="val">{{movie.tagline}}</h3></div>
+            {% endif %}
+            
+            <div class="header__row" >
+                <h4>Original Language: </h4>
+                               
+                <h4 class="val">{{movie.original_language | upper}}</h4>
+                </ul>
+            </div>
+
+            <div class="header__row" >
+                <h4>Languages: </h4>
+                <ul class="movie__tags">
+                {% for lang in movie.spoken_languages %}
+                <li class="movie__tag val" ><a href="{{url_for('movies', filter='spoken_languages',val=lang.get('english_name'), title=lang.get('english_name')) }}" style="text-decoration: none;"> {{ lang.get('english_name')  }} {% if  lang.get('english_name')!=  lang.get('name') and lang.get('name') %} ({{ lang.get('name')  }}) {%endif%}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <div class="header__row">
+                <h4>Genres: </h4>
+                <ul class="movie__tags">
+                    
+                {% for tag in movie.genres %}
+                <li class="movie__tag val"><a href="{{url_for('movies', filter='genres',val=tag.get('name') , title=tag.get('name'))}}" style="text-decoration: none;"> {{ tag.get('name')  }} </a></li>
+                {% endfor %}
+    
+                </ul>
+            </div>
+
+            <div class="header__row"> 
+                <h4>Runtime (mins): </h4><h4 class="val"> {{movie.runtime | int}} </h4>
+            </div>
+
+            <div class="header__row"> 
+                <h4>Status : </h4> <h4 class="val">{{movie.status}} </h4>
+                {% if movie.release_date %}  <h4>/</h4>
+                <h4>Release Date : </h4> <h4 class="val">{{movie.release_date}} </h4>{%endif%}
+            </div>
+
+            <div class="header__row">
+                {% if movie.imdb_id %}
+                
+                <h4><a href="https://www.imdb.com/title/{{movie.imdb_id}} " target="_blank" rel="noopener noreferrer" style="text-decoration: none;">IMDB Link</a></h4>
+                
+                {% endif %}
+
+                {% if movie.homepage %}
+                <h4>/</h4>
+                <h4><a href="{{movie.homepage}} " target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Homepage</a></h4>
+                
+                {% endif %}
+            </div>
+           
+            
+        </header>   
+       
+            <img src = {{movie.poster_path}} alt="Poster" id="poster" class="movieposter" name="modal_img" style="height: 75vh; cursor: pointer; box-shadow: 0 4px 8px 0 rgba(88, 87, 87, 0.2), 0 6px 20px 0 gray;" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+            {% for i in movie.images %}
+            <img src = {{i}} alt="Poster" id="bgpath_{{loop.index+1}}" style=" display: none; height: 75vh; cursor: pointer; box-shadow: 0 4px 8px 0 rgba(88, 87, 87, 0.2), 0 6px 20px 0 gray;" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+            {% endfor %}
+            <!-- The Modal -->
+          <div class="modalImg " id="img_modal" >
+            
+            <div class="numbertext" id="popno" style="top: 30px;">1 / {{movie.images.__len__()}}</div>
+            <div class="close" style="position:absolute; left:90%">&times;</div>
+            {#<iframe name="modal_img" class="modal_img" src=""  allowfullscreen></iframe> #}
+            <img class="modal-content" id="img01"/>
+            
+            
+            <a id = "popprev">&#10094;</a>
+            <a id = "popnext" style="right: 120px;">&#10095;</a>
+        
+        
+          </div>
+          
+        
+          {{popup()}}
+    
+
+        <div class="movie__description"> {{ movie.overview}} </div>
+       
+        {% if movie.trailers!= '[]' and movie.trailers|string !='nan' %}
+        
+        <div class = "links">
+            <a href = {{movie.trailers}} class="logo__name info header__logo" target="modal_iframe" onClick="showModal()" style="padding-top: 0.5rem; justify-content: center; height: 1.5rem; align-items: none; ">Trailer <span class="tooltiptext">View Trailer</span></a> 
+            {# <div class="popup" ><iframe max-width="inherit" height="126" src="{{movie.trailers}}" class="trailer" referrerpolicy = "origin" frameborder="0" gesture="media" allow="autoplay; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe> </div> #}
+        </div>
+        
+         
+        <div id="modal">
+            <div class="close" onClick="hideModal();">&times;</div>
+            <iframe name="modal_iframe" class= "videoplayer" src="" referrerpolicy = "origin" frameborder="5%" gesture="media" allow="autoplay; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe>
+          </div>
+  
+          
+        {% endif %}
+        <div class="bg-image" > </div>
+
+        {{ modals() }}
+        <div style="display: flex;">
+        
+    </div> 
+      
+        <!--Here-->
+    {% if movie.cast%}
+    <h3 style="text-align:center; color: var(--accent-colour-dark)">Cast & Crew </h3>
+    {% endif %}
+    <div class="row">
+
+      {% for m in movie.cast %}
+        <div class="card">
+        
+          <img src="{{m.get('profile_path')}}"  onclick="openModal();currentSlide('{{loop.index}}')" class="hover-shadow cursor" >
+          <div class="content">
+          <h4>
+            <span class= "info" > 
+            <a href="{{url_for('actors',act_id=m.get('id') , title= m.get('name') )}}" class = 'act-name' style="text-decoration: none;">{{m.get('name')}} </a>
+            <span class="tooltiptext" style=" z-index: 2; ">Go to All {{m.get('name')}} Movies.</span>
+            </span>
+           
+        </h4>
+          
+          <p class="title">{%if m.get('character',0) or m.get('job') %}{{m.get('character',0) or m.get('job')}}{%else%}------ {%endif%}</p>
+        </div>
+        </div>
+        
+        {% endfor %}
+        {% set len = movie.cast.__len__()%}
+    </div>
+    
+    <div id="myModal" class="modal2">
+      
+      
+      <div class="modal-content2">
+    
+        {% for m in movie.cast %}
+
+        <div class="mySlides">
+          <div class="numbertext">{{loop.index}} / {{len}}</div>
+          <img src="{{m.get('profile_path')}}" class='popimg' style="width:100%" alt="{{m.get('name')}}">
+        </div>
+        {% endfor %}
+        
+        
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    
+        <div class="caption-container">
+          <p id="caption" style="color: var(--accent-colour-dark);"></p>
+        </div>
+    
+      </div>
+      <div class="close2" onclick="closeModal()">&times;</div>
+    </div>
+    
+    {{ gallery() }}
+                <!---->
+
+        
+        {% else %}
+        <p class="table__empty">Could'nt find the movie you searched. <a href="{{ url_for('display_all') }}" class="link">List of all movies</a></p>
+        
+        {# <a href="{{ url_for('fav_movie') }}" class="button button--fav">
+            <span class= "info">+
+            <span class="tooltiptext">Add Favorite Movie!</span>
+        </span>
+        </a> #}
+        {% endif %}
+    </div>
+    <script>
+        let pic = document.getElementsByClassName('movieposter');
+        pic[0].style.height = document.getElementsByClassName('movie__header')[0].scrollHeight + "px";
+        window.addEventListener('load', function () {
+          
+            loadCards();
+        // function reloadCss()
+        // {
+        //     var links = document.getElementsByTagName("link");
+        //     for (var cl in links)
+        //     {
+        //         var link = links[cl];
+        //         if (link.rel === "stylesheet")
+        //             link.href += "";
+        //     }
+        // }
+        // reloadCss();
+         });
+        
+        </script> 
+
+        
+           
+    {% endblock %}
+    

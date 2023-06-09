@@ -1,0 +1,190 @@
+{% macro popup() %}
+<script>
+    // Get the modal
+    var modal = document.getElementById("img_modal");
+    
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementsByName('modal_img');
+    var modalImg = document.getElementById("img01");
+    
+   
+    $(document).on("click","#poster",function(){
+      
+      modal.style.display = "block";
+      var total = parseInt( $('#popno').text().split('/')[1]);
+      $('#popno').text('1 / '+(total+1)) ;
+      modalImg.src = this.src;
+      
+      $('.bg-image').show();
+      $('.footer').hide();
+      $('.row').hide();
+      
+    });
+    $("#img01").on('load', function() {
+      
+      if( $(this).height() / $(this).width() < 0.6666666666666667 ) {
+      
+        $(this).css(
+          {
+            "margin-top": "35%",
+            "margin-left": "5%",
+            "transform": "scale(2)"
+          }
+        );
+
+        $('#popprev').css(
+          {
+            "margin-left": "-35%",
+          }
+        );
+
+        $('#popnext').css(
+          {
+            "margin-right": "-45%",
+          }
+        );
+
+        $('div.close').css(
+          {
+            "margin-top": "5%",
+            "margin-left": "30%",
+          }
+        );
+
+        $('div#popno').css(
+          {
+            "z-index": 199,
+            "margin-left": "-35%",
+            "margin-top": "10%",
+          }
+        );
+
+
+
+        }
+    else {
+    $(this).css(
+          {
+           
+            "margin-top": "0%",
+            "margin-left": "-5%",
+            "transform": "scale(1)",
+          }
+        );
+
+        $('#popprev').css(
+          {
+            "margin-left": "-5%",
+            
+          }
+        );
+
+        $('#popnext').css(
+          {
+           
+            "margin-right": "5%",
+          }
+        );
+
+        $('div.close').css(
+          {
+            "margin-top": "-5%",
+            "margin-left": "-20%",
+          }
+        );
+
+        $('div#popno').css(
+          {
+            "z-index": 199,
+            "margin-left": "-5%",
+            "margin-top": "0%",
+          }
+        );
+
+
+        }            
+    
+    
+     
+        // var width  = $(this).width();
+        // var height = $(this).height();
+        // var parentWidth  = $(this).parent().width();
+        // var parentHeight = $(this).parent().height();
+
+        // if(width/parentWidth < height/parentHeight) {
+        //     newWidth  = parentWidth;
+        //     newHeight = newWidth/width*height;
+        // }
+        // else {
+        //     newHeight = parentHeight;
+        //     newWidth  = newHeight/height*width;
+        // }
+        // var margin_top  = (parentHeight - newHeight) / 2;
+        // var margin_left = (parentWidth  - newWidth ) / 2;
+
+        
+   
+
+});
+
+    $(document).on("click","#popnext",function(){
+         var pg = parseInt($('#popno').text().split('/'));
+         var total = parseInt( $('#popno').text().split('/')[1]);
+        
+         if(pg<total)
+         { 
+        var nextimg = document.getElementById("bgpath_"+(pg+1)).src;
+         modalImg.src = nextimg;
+         $('#popno').text((pg+1)+' / '+total) ;
+         }
+         else { modalImg.src = document.getElementById("poster").src;
+         
+         $('#popno').text('1 / '+total) ; }
+
+         modal.style.display = "block";
+         $('.bg-image').show();
+         $('.footer').hide();
+         $('.row').hide();
+         
+
+       });
+
+       $(document).on("click","#popprev",function(){
+        var pg = parseInt($('#popno').text().split('/'));
+        var total = parseInt( $('#popno').text().split('/')[1]);
+         modal.style.display = "block"
+         
+         if(pg>2)
+         { pg-=1;
+          var nextimg = document.getElementById("bgpath_"+pg).src;
+         modalImg.src = nextimg;
+         $('#popno').text(pg+' / '+total) ;
+         }
+         else if(pg==2)
+         {
+          var nextimg = document.getElementById("poster").src;
+         modalImg.src = nextimg;
+         $('#popno').text('1 / '+total) ;
+         }
+         else { modalImg.src = document.getElementById("bgpath_"+total).src;
+         $('#popno').text(total+' / '+total) ; }
+         $('.bg-image').show();
+         $('.footer').hide();
+         $('.row').hide();
+         
+        
+       });
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+      modal.style.display = "none";
+      $('.bg-image').hide();
+      $('.footer').show();
+      $('.row').show();
+    }
+    </script>
+
+{% endmacro %}

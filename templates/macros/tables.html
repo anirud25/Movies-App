@@ -1,0 +1,53 @@
+{% macro tabular() %}
+{% from "macros/loader.html" import loader %}
+{% from "macros/datatable_imports.html" import style_imports %}
+{{loader()}}
+{{style_imports()}}
+<script>
+    $(document).ready(function () {
+      $('#data').on("processing.dt", function () {
+        
+        myFunction(1500);
+          
+      } ).DataTable({
+        columns: [ 
+            {orderable: true, searchable: false}, /* remove columns for search */
+            null, /*no customisation*/
+            {orderable: false, searchable: true}, /*removes the clickable sorting headers */
+            {orderable: false, searchable: true},
+            ],
+        select: true,
+        dom: 'lBfrtip',
+        fixedHeader: true,
+        lengthMenu: [
+            [10, 25, 50, 100],
+            ['10', '25', '50', '100']
+        ],
+        language: {
+        search: "_INPUT_",
+        searchPlaceholder: "Search...", } ,
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 
+        {
+          "extend": 'colvis',
+          "text": 'Select Columns',
+          'className': 'btn btn-info',    
+        }
+        ],
+        responsive: true,
+        scrollY:        400,
+        deferRender:    true,
+        scroller:       true,
+        display: 'envelope',
+        "initComplete": () => { 
+          $('#data').DataTable().columns.adjust().draw();
+          
+         $("#data").show();
+        
+        }
+      });
+      $('#data').DataTable().buttons().container()
+              .appendTo('#dataTables_wrapper .col-md-6:eq(0)');
+    });
+  </script>
+
+{% endmacro %}

@@ -1,0 +1,132 @@
+{% macro style_imports() %}
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+ -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="//cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css" rel="stylesheet">
+
+
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+
+<style>
+  th {
+    text-transform: capitalize !important;
+  }
+
+  thead {
+    overflow: scroll !important;
+    color: var(--accent-colour) !important; 
+  }
+
+  td {
+    color: var(--text-dark) !important;
+  }
+
+    
+  td:last-child:hover {
+    color: var(--accent-colour-dark) !important;
+  }
+
+  .dataTables_wrapper {
+  
+  margin-bottom: 0.5em;
+
+  
+}
+
+.btn {
+
+  background-color: var(--accent-colour) !important;
+  color : var(--text-light) !important;
+  border: none !important;
+}
+
+.btn:hover {
+
+background-color: var(--accent-colour-dark) !important;
+color : var(--text-dark) !important;
+}
+
+.dropdown-item.active {
+
+  color: black !important;
+  background-color: #373333a6!important;
+  background: #7f7c7ca6 !important;
+  border-radius: 20px 20px 20px 20px;
+  text-transform: capitalize !important;
+}
+
+a.dropdown-item:hover {
+
+background: var(--accent-colour-dark) !important;
+color : var(--text-dark) !important;
+}
+
+.dropdown-item {
+color: var(--text-light) !important;
+background-color: var(--accent-colour) !important;
+text-transform: capitalize !important;
+}
+
+a.dropdown-item.active:hover,
+a.dropdown-item.active:focus,
+a.dropdown-item.active:focus:not(.disabled) {
+
+color: white !important;
+background-color: #373333a6 !important;
+background: linear-gradient(to bottom, #d1e2f7 0%, rgb(38 42 47) 100%) !important;
+}
+
+.dt-button-collection {
+
+  background: var(--background-color) !important;
+}
+
+#datatables_buttons_info {
+color: var(--text-dark) !important;
+}
+
+#datatables_buttons_info h2 {
+background: var(--background-color) !important;
+}
+
+#datatables_buttons_info div {
+  background: var(--text-light) !important;
+}
+
+
+ </style>
+{% endmacro %}

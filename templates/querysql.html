@@ -1,0 +1,108 @@
+{% from "macros/tables.html" import tabular %}
+{% from "macros/modals.html" import modals %}
+
+{% extends "layout.html" %}
+
+{%- block head_content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %} 
+
+{% block main_content %}
+
+{% if movies_data.empty %}
+<form name="login" method="post" action="{{url_for('something')}}">
+       
+
+    <div class="form__container">
+      
+        <input type="text" placeholder = "select id,release_date,year,title,genres from movies_db where year like '%2020%';"
+        value="select id,release_date,year,title,genres from movies_db where year like '%2020%';" name="query" style="width: 55em; height: 10em; word-wrap: break-word;"> </input>
+    
+  
+        <button class="button--form" value="Run">RUN</button>
+    </div>
+  </form>
+  {% endif %}
+
+
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+  
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+  {% if not movies_data.empty %}
+  <table id="data" class="table table-striped" style="color: var(--accent-colour) !important; ">
+      <thead style="overflow: scroll;">
+      <tr >
+      {% for c in cols[1:] %}
+        
+          <th style="text-transform: capitalize;">{{c}}</th>
+        
+      {%endfor%}
+      </tr>
+      </thead>
+      <tbody>
+      
+      {% for i,mov in movies_data.iterrows() %}
+      {% set idx = loop.index0 %}
+          <tr style="color: var(--text-dark) !important;">
+          {% for c in movies_data.columns[1:] %}
+          
+          {%if c=='poster_path' %}
+              <td style="color: var(--text-dark) !important;"><img src= "https://image.tmdb.org/t/p/original{{ mov[c] }}" style="width: 150px; height: auto; max-width: none; max-height: none;" alt="poster"> </img></td>
+            
+          {% elif c=='trailers'%}
+          <td style="color: var(--text-dark) !important; overflow: auto;"> 
+              <iframe style="width: 224px !important; height: auto !important; position: relative !important; max-width: none; max-height: none;" src="{{mov[c]}}" allowfullscreen></iframe>
+          </td>
+          {% elif c=='overview' %}
+          <td style="color: var(--text-dark) !important; overflow: auto; ">
+          <div>
+              <input type="checkbox" class="read-more-state-{{idx}}" id="post-1" />
+            
+              <p class="read-more-wrap-{{idx}}" id="all-wraps" style="border: none; height: auto !important; width: 300px !important; "><span class="def-wrap-{{idx}}">{{' '.join(mov[c].split()[:9])}}
+              
+              <label id="read-more-label-{{idx}}" for="post-1" class="blue read-more-trigger-{{idx}} all-labels" >»</label>
+              </span> <span class="read-more-target-{{idx}}" id="all-targets">{{mov[c]}} <label id="read-more-label-{{idx}}" for="post-1" class="blue read-more-trigger-{{idx}} all-labels" >«</label> </span>
+              </p>
+            </div>   
+          </td>
+          {% else %}
+            <td style="color: var(--text-dark) !important;">{{ mov[c] }}</td>
+          
+          {% endif %}
+            {%endfor%}
+          </tr>
+    
+      {% endfor %}
+      </tbody>
+  </table>
+  
+  {{ modals() }}
+ 
+  
+  {% else %}
+  <p class="table__empty">No movies found. :( <a href="{{ url_for('index') }}" class="link">Go back to Homepage</a></p>
+  {% endif %}
+  
+  <script>
+      $(document).ready(function () {
+        $('#data').DataTable({
+          
+           responsive: true,
+           //scrollX:  350,
+           scrollY:  420,
+          // deferRender:    true,
+          // scroller:       true,
+          
+        });
+        
+        
+      });
+    </script>
+
+{% endblock %}

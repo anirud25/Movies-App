@@ -1,0 +1,10 @@
+flask
+gunicorn
+python-dotenv
+flask-wtf
+pymongo
+passlib
+wtforms
+flask-sqlalchemy
+# conda install -c anaconda swig
+-e .

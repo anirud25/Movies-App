@@ -1,0 +1,198 @@
+{% from "macros/tables.html" import tabular %}
+{% from "macros/modals.html" import modals %}
+{% from "macros/loader.html" import loader %}
+{% from "macros/datatable_imports.html" import style_imports %}
+{% extends "layout.html" %}
+
+{% block head_content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/w3.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+
+{% endblock %}
+
+{% block main_content %}
+
+
+
+<style>
+  #data {
+    display: none;
+  }
+
+  div.dataTables_length {
+      width: 180px !important;
+      display: inline-flex !important;
+      margin-right: 15em !important;
+      margin-left: 5em !important;
+    }
+   
+    .dataTables_info {
+      width: fit-content !important;
+      display: inline-flex !important;
+      margin-right: 0 !important;
+    }
+   
+    div.dt-buttons {
+
+      width: fit-content !important;
+      margin-right: 1em !important;
+      
+      align-items: left !important;
+    }
+    
+    .dataTables_filter {
+      width: 180px !important;
+      display: inline-flex !important;
+      
+    }
+
+    .movie__tag {
+     margin-left: 1px !important; 
+     
+    }
+    a:hover {
+     color: var(--accent-colour) !important;
+    }
+    
+</style>
+{{loader()}}
+{{style_imports()}}
+
+{% if not movies_data.empty %}
+<table id="data" class="table table-striped" style="color: var(--accent-colour) !important; table-layout: auto; ">
+    <thead>
+    <tr>
+    {% for c in cols[1:] %}
+      
+        <th style="text-transform: capitalize;">{{c}}</th>
+      
+    {%endfor%}
+    </tr>
+    </thead>
+    <tbody>
+    
+    {% for i,mov in movies_data.iterrows() %}
+    {% set idx = loop.index0 %}
+        <tr style="color: var(--text-dark) !important;">
+        {% for c in movies_data.columns[1:] %}
+        
+        {%if c=='poster_path' %}
+            <td>
+              <img src = "{{ mov[c] }}" alt="Poster" id="poster" name="modal_img" style="width: 150px; height: auto; max-width: none; max-height: none;" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+              </td>
+            
+        {% elif c=='genres' %}
+        <td><span style="display: flex;" class="movie__tags" >
+        {% for tag in mov[c] %}
+        <li class="movie__tag"><a href="{{url_for('movies', filter='genres',val=tag.get('name') , title=tag.get('name'))}}" style="text-decoration: none; color: var(--text-dark) !important; "> {{ tag.get('name')  }} </a></li>
+        {% endfor %}
+        </span></td>
+
+        {% elif c=='spoken_languages' %}
+        <td>
+        {% for lang in mov[c] %}
+        {{ lang.get('english_name')  }} {% if  lang.get('english_name')!=  lang.get('name') and lang.get('name') %} ({{ lang.get('name')  }}) {%endif%}
+        {% endfor %}
+        </td>
+      
+        {%elif c=='title' %}
+            <td style="color: var(--text-dark) !important;"><a href= "{{url_for('movie',mov_id=mov.id)}}" style="text-decoration: none;">{{mov[c]}}</a> </td>
+
+        {% elif c=='trailers'%}
+        <td style="color: var(--text-dark) !important; overflow: auto;"> 
+            <iframe style="width: 224px !important; height: auto !important; position: relative !important; max-width: none; max-height: none;" src="{{mov[c]}}" allowfullscreen></iframe>
+        </td>
+        {% elif c=='overview' %}
+        <td style="color: var(--text-dark) !important; overflow: auto; ">
+        <div>
+            <input type="checkbox" class="read-more-state-{{idx}}" id="post-1" />
+          
+            <p class="read-more-wrap-{{idx}}" id="all-wraps" style="border: none; height: auto !important; width: 300px !important; "><span class="def-wrap-{{idx}}">{{' '.join(mov[c].split()[:9])}}
+            
+            <label id="read-more-label-{{idx}}" for="post-1" class="blue read-more-trigger-{{idx}} all-labels" >»</label>
+            </span> <span class="read-more-target-{{idx}}" id="all-targets">{{mov[c]}} <label id="read-more-label-{{idx}}" for="post-1" class="blue read-more-trigger-{{idx}} all-labels" >«</label> </span>
+            </p>
+          </div>   
+        </td>
+        {% else %}
+          <td style="color: var(--text-dark) !important;">{{ mov[c] }}</td>
+        
+        {% endif %}
+          {%endfor%}
+        </tr>
+  
+    {% endfor %}
+    </tbody>
+</table>
+
+{{ modals() }}
+
+
+{% else %}
+<p class="table__empty">No movies found. :( <a href="{{ url_for('index') }}" class="link">Go back to Homepage</a></p>
+{% endif %}
+
+
+ 
+
+<script>
+   
+    
+    $(document).ready(function () {
+     
+      $('#data').on("processing.dt", function () {
+        
+      myFunction(1500);
+        
+    } ).DataTable({
+
+      select: true,
+      dom: 'lBfrtip',
+      fixedHeader: true,
+      lengthMenu: [
+          [10, 25, 50, 100],
+          ['10', '25', '50', '100']
+      ],   
+        columns: [ 
+            {orderable: true, searchable: true}, /* remove columns for search */
+            {orderable: false, searchable: true}, /*no customisation*/
+            {orderable: true, searchable: false}, /*removes the clickable sorting headers */
+            null,
+            null,
+            {orderable: true, searchable: false},
+            
+            {orderable: true, searchable: false},
+            {orderable: false, searchable: true},
+            
+            ],
+        language: {
+        search: "_INPUT_",
+        searchPlaceholder: "Search...", } ,
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 
+        {
+          "extend": 'colvis',
+          "text": 'Select Columns',
+          'className': 'btn btn-info',    
+        }
+        ],
+         //responsive: true,
+         //scrollX:  350,
+         scrollY:  405,
+        deferRender:    true,
+        
+        // scroller:       true,
+        "initComplete": () => { 
+          $('#data').DataTable().columns.adjust().draw();
+          
+         $("#data").show();
+        
+        }
+        
+      });
+      $('#data').DataTable().buttons().container()
+              .appendTo('#dataTables_wrapper .col-md-6:eq(0)');
+    });
+    
+  </script>
+{% endblock %}

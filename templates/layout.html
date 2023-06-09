@@ -1,0 +1,28 @@
+{% from "macros/nav.html" import header %}
+{% from "macros/footer.html" import footer %}
+{% from "macros/svgs.html" import logo %}
+<!DOCTYPE html>
+<html lang="en" class="{{ '' if session.get('theme') == 'light' else 'dark-mode' }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>{{ title | default('Movies DB') }}</title>
+        <link href="https://fonts.googleapis.com/css?family=Public+Sans:400,600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+        <link rel = "icon" href = "../static/assets/MoviesDB_logo.svg" type = "image/x-icon">
+
+        {% block head_content %} {% endblock %}
+    </head>
+    
+    <body>
+        {{ header(session.get("email"), session.get("theme")) }}
+        <main class="main">
+            {% block main_content %} {% endblock %}
+        </main>
+    </body>
+
+
+    {{ footer() }}
+</html>

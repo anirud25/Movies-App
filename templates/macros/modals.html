@@ -1,0 +1,241 @@
+{% macro modals() %}
+<script>
+function showModal()
+{
+  $("#modal").animate({
+    height: 'toggle',
+    width: 'toggle'
+  }, "slow");
+  
+$('#modal').show();
+$('.bg-image').show();
+$('.footer').hide();
+$('.row').hide();
+
+$('div.close').css({
+  "margin-left": "3%"
+});
+
+}
+
+function hideModal()
+{
+  
+  $("#modal").animate({
+    height: 'toggle',
+    width: 'toggle'
+  }, "slow");
+$('.bg-image').hide();
+$('.footer').show();
+$('.row').show();
+
+$('div.close').css({
+  "margin-left": "0%"
+});
+}
+
+
+$('.close').click(function(){
+        $('.videoplayer').each(function(){
+        var el_src = $(this).attr("src");
+        $(this).attr("src",el_src);
+      });
+      
+    });
+
+
+
+
+
+[].slice.call(document.getElementsByClassName('blue')).forEach(ele => ele.onclick = (ele) => {
+  var list = ele.target.getAttribute("class").split(" ")[1];
+  $('.read-more-target-'+list.split('-')[3]).animate({
+    height: 'toggle',
+    width: 'toggle'
+  }, "slow");
+  
+  
+  
+  if(document.getElementById('read-more-label-'+list.split('-')[3]).innerHTML == '»'){
+  document.getElementById('read-more-label-'+list.split('-')[3]).innerHTML = '«';
+  /*document.getElementsByClassName('def-wrap-'+list.split('-')[3])[0].innerHTML='';*/
+  document.getElementsByClassName('def-wrap-'+list.split('-')[3])[0].style.display = 'none';
+  }
+  else {
+  document.getElementsByClassName('def-wrap-'+list.split('-')[3])[0].style.display = 'block';
+  document.getElementById('read-more-label-'+list.split('-')[3]).innerHTML = '»';
+}
+
+});
+
+function resizeCard (){
+
+  let cards = document.getElementsByClassName('w3-quarter');
+
+  for( let i= 0; i < cards.length; i++ ){
+   
+    
+    let links = cards[i].getElementsByTagName('h3');
+    let titles = links[0].getElementsByTagName('a');
+    let desc = cards[i].getElementsByTagName('span');
+    let trailer = cards[i].getElementsByClassName('links');
+    
+    links[0].style.whiteSpace = 'pre';
+    if(cards[i].getBoundingClientRect().width - titles[0].getBoundingClientRect().width <  6){
+      titles[0].style.fontSize = '0.75em';
+      
+    }
+    if (cards[i].getBoundingClientRect().width - titles[0].getBoundingClientRect().width <  2){
+      titles[0].style.fontSize = '0.7em';
+      links[0].style.position = 'relative';
+      titles[0].style.position = 'relative';
+      titles[0].style.left = '-2%';
+    }
+    if (cards[i].getBoundingClientRect().width - titles[0].getBoundingClientRect().width <  1){
+      titles[0].style.fontSize = '0.64em';
+      
+      // desc[0].style.position = 'relative';
+      // links[0].style.position = 'relative';
+      // titles[0].style.top = '-1vh';
+      // desc[0].parentElement.style.position = 'relative';
+      // desc[0].parentElement.style.top = '-1vh';
+      // trailer[0].style.position = 'relative';
+      // trailer[0].style.top = '-1.5vh';
+      links[0].style.whiteSpace = 'pre-wrap';
+      links[0].style.lineHeight = '0.65em';
+    }
+  
+  
+  let image = cards[i].getElementsByTagName('img')[0]
+  image.style.maxWidth = desc[0].getBoundingClientRect().width;
+  image.style.height = '400px';
+  
+
+  if(desc[0].getBoundingClientRect().height < 50){
+    cards[i].style.paddingBottom = '37px';
+    //cards[i].style.background = 'green';
+  }
+  if(trailer[0] == null){
+   //alert(parseInt(cards[i].style.paddingBottom.split('px')[0])+20+'px');
+    cards[i].style.paddingBottom = (parseInt(cards[i].style.paddingBottom.split('px')[0])||20)+20+'px';
+    //cards[i].style.background = 'cyan';
+  }
+  
+
+  }
+ 
+}
+
+
+function loadCards(){
+
+        let pr = document.getElementsByClassName('title');
+        let ar = document.getElementsByClassName('act-name');
+        let content = document.getElementsByClassName('content');
+        let image = document.getElementsByClassName('hover-shadow');
+        let card = document.getElementsByClassName('card');
+        
+        let i = 0;
+        for( i; i < pr.length; i++ ){
+        
+            if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+               
+                pr[i].scrollWidth = pr[i].clientWidth;
+                pr[i].style.fontSize ='0.93em';
+                pr[i].style.paddingBottom = '0.09em';
+                
+            }
+            if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+               pr[i].style.fontSize = '0.85em';
+               pr[i].style.paddingBottom = '0.2em';
+               
+           }
+            if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+               pr[i].style.fontSize = '0.75em';
+               pr[i].style.paddingBottom = '0.25em';
+               pr[i].style.marginLeft = '-0.8em';
+               ar[i].style.marginLeft = '-0.8em';
+              
+               
+           }
+           if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+               pr[i].style.fontSize = '0.7em';
+               pr[i].style.paddingBottom = '0.6em';
+               
+           }
+
+           if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+               pr[i].style.fontSize = '0.65em';
+               pr[i].style.whiteSpace = 'pre-wrap';
+               pr[i].style.paddingBottom = '0em';
+               pr[i].style.marginTop = '-1em';
+               pr[i].style.lineSize = '0.65em';
+               pr[i].style.marginLeft = '-0.5em';
+               ar[i].style.marginLeft = '-0.5em';
+               ar[i].style.position = 'relative';
+               ar[i].style.top= '-0.3em';
+               
+           }
+           content[i].style.position = "absolute";
+           content[i].style.bottom = card[i].scrollHeight - image[i].scrollHeight - 3+"px";
+        }
+}
+
+
+function loadActors(){
+  let ar = document.getElementsByClassName('title');
+    let pr = document.getElementsByClassName('act-name');
+    let content = document.getElementsByClassName('content');
+    let image = document.getElementsByClassName('hover-shadow');
+    let card = document.getElementsByClassName('card');
+    
+    let i = 0;
+    for( i; i < pr.length; i++ ){
+    
+        if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+          pr[i].style.fontSize = '0.95em';
+          pr[i].style.whiteSpace = 'pre-wrap';
+            
+            
+        }
+        if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+           pr[i].style.fontSize = '0.85em';
+           pr[i].style.paddingBottom = '0.2em';
+         
+       }
+        if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+           pr[i].style.fontSize = '0.75em';
+           pr[i].style.paddingBottom = '0.25em';
+           pr[i].style.marginLeft = '-0.8em';
+           ar[i].style.marginLeft = '-0.8em';
+           pr[i].style.whiteSpace = 'pre-wrap';
+     
+           
+       }
+       if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+           pr[i].style.fontSize = '0.7em';
+           pr[i].style.paddingBottom = '0.6em';
+           
+       }
+
+       if( pr[i].scrollWidth - pr[i].clientWidth > 0 ) { // overflow
+           pr[i].style.fontSize = '0.65em';
+           pr[i].style.whiteSpace = 'pre-wrap';
+           pr[i].style.paddingBottom = '0em';
+           pr[i].style.marginTop = '-1em';
+           pr[i].style.lineSize = '0.65em';
+           pr[i].style.marginLeft = '-0.5em';
+           ar[i].style.marginLeft = '-0.5em';
+           ar[i].style.position = 'relative';
+           ar[i].style.top= '-0.3em';
+           
+           
+       }
+       content[i].style.position = "absolute";
+       content[i].style.bottom = card[i].scrollHeight - image[i].scrollHeight - 3+"px";
+       
+    }
+}
+
+</script>
+{% endmacro %}

@@ -1,0 +1,186 @@
+{% from "macros/svgs.html" import star, pencil %}
+{% from "macros/gallery.html" import gallery %}
+{% from "macros/modals.html" import modals %}
+{% from "macros/posterpopup.html" import popup %}
+{% extends "layout.html" %}
+
+{% block head_content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cast_details.css') }}" />
+
+{% endblock %}
+
+{% block main_content %}
+
+<div class="container" style="margin: 0; padding: 10px 100px; ">
+    {% if not actor.empty %}
+
+        
+    <header class="movie__header">
+            <div class="header__row">
+                <div class="movie__name" style="display: inline-flex; column-gap: 1vh;">
+                    <h1>{{actor.get('name')}} </h1> 
+                    {# if actor.original_title != movie.title%} / {{ movie.original_title }}
+                    {%endif#}
+                    
+                </div>
+
+            </div>
+            <div class="header__row">
+            {% if actor.birthday %}
+            <h4>Birthday: </h4>
+            <h4 class="val">{{actor.birthday}}</h4>
+            {% endif %}
+        </div>
+           
+            <div class="header__row">
+            {% if actor.known_for_department %}
+            <h4>Known for: </h4>
+            <h4 class="val">{{actor.known_for_department}}</h4>
+            {% endif %}
+            </div>
+            <div class="header__row" >
+                <h4>Gender: </h4>         
+                <h4 class="val">{{actor.gender}}</h4>
+                </ul>
+            </div>
+
+          
+            {% if actor.also_known_as|string !="['']" %}
+            
+            <div class="header__row" >
+                <h4>Also Known as: </h4>
+                <div style="max-width: 80%;">
+                <ul class="movie__tags" style="display: flex; flex-wrap: wrap; justify-content:stretch;" >
+                
+                {% for tag in actor.also_known_as %}
+                <li class="movie__tag val" style="margin-bottom: 0.2em; margin-left: 0.15em; "> {{ tag }} </li>
+                {% endfor %}
+               
+                </ul>
+                </div>
+            </div>
+            {% endif %}
+            <div class="header__row"> 
+                <h4>Place of Birth : </h4><h4 class="val"> {{actor.place_of_birth }} </h4>
+            </div>
+
+            
+
+            <div class="header__row">
+                {% if actor.imdb_id %}
+                
+                <h4><a href="https://www.imdb.com/name/{{actor.imdb_id}} " target="_blank" rel="noopener noreferrer" style="text-decoration: none;">IMDB Link</a></h4>
+                
+                {% endif %}
+
+                {% if actor.homepage %}
+                <h4>/</h4>
+                <h4><a href="{{actor.homepage}} " target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Homepage</a></h4>
+                
+                {% endif %}
+            </div>
+           
+            
+        </header>   
+       
+            <img src = {{actor.profile_path}} alt="Poster" id="poster" class="movieposter" name="modal_img" style="height: 75vh; cursor: pointer; box-shadow: 0 4px 8px 0 rgba(88, 87, 87, 0.2), 0 6px 20px 0 gray;" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+            {% for i in actor.images %}
+            <img src = {{i}} alt="Poster" id="bgpath_{{loop.index+1}}" style=" display: none; height: 75vh; cursor: pointer; box-shadow: 0 4px 8px 0 rgba(88, 87, 87, 0.2), 0 6px 20px 0 gray;" onerror="this.src='../static/assets/no-poster-available.jpg';this.onerror=''; this.id='';"></img>
+            {% endfor %}
+            <!-- The Modal -->
+          <div class="modalImg " id="img_modal" >
+            
+            <div class="numbertext" id="popno" style="top: 30px;">1 / {{actor.images.__len__()}}</div>
+            <div class="close" style="position:absolute; left:90%">&times;</div>
+            {#<iframe name="modal_img" class="modal_img" src=""  allowfullscreen></iframe> #}
+            <img class="modal-content" id="img01"/>
+            
+            
+            <a id = "popprev">&#10094;</a>
+            <a id = "popnext" style="right: 120px;">&#10095;</a>
+        
+        
+          </div>
+          
+        
+          {{popup()}}
+    
+
+        <div class="movie__description"> {{ actor.biography}} </div>
+       
+       
+            {% if actor.cast%}
+            <h3 style="text-align:center; color: var(--accent-colour-dark)">Filmography </h3>
+            {% endif %}
+            <div class="row">
+        
+              {% for m in actor.cast + actor.crew %}
+              {% if not m.get('adult') %}
+                <div class="card">
+                
+                  <img src="{{m.get('poster_path')}}"  onclick="openModal();currentSlide('{{loop.index}}')" class="hover-shadow cursor" >
+                  <div class="content">
+                  <h4>
+                    <span class= "info" > 
+                    <a href="{{url_for('movie', mov_id=m.get('id'), title= m.get('title') )}}" class = 'act-name' style="text-decoration: none;display: flex; flex-wrap: wrap; justify-content:stretch;" >{{m.get('title')}} </a>
+                    <span class="tooltiptext" style=" z-index: 2; ">Go to {{m.get('title')}} Movie.</span>
+                    </span>
+                   
+                </h4>
+                  
+                  <p class="title">{%if m.get('character',0) or m.get('job') %}{{m.get('character',0) or m.get('job')}}{%else%}------ {%endif%}</p>
+                </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% set len = (actor.cast + actor.crew).__len__()%}
+            </div>
+            <div id="myModal" class="modal2">
+      
+      
+                <div class="modal-content2">
+              
+                  {% for m in actor.cast + actor.crew %}
+          
+                  <div class="mySlides">
+                    <div class="numbertext">{{loop.index}} / {{len}}</div>
+                    <img src="{{m.get('poster_path')}}" class='popimg' style="width:100%" alt="{{m.get('title')}}">
+                  </div>
+                  {% endfor %}
+                  
+                  
+                  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+              
+                  <div class="caption-container">
+                    <p id="caption" style="color: var(--accent-colour-dark);"></p>
+                  </div>
+              
+                </div>
+                <div class="close2" onclick="closeModal()">&times;</div>
+              </div>
+              
+              {{ gallery() }}
+              
+    {% endif %}
+    <div class="bg-image" > </div>
+
+        {{ modals() }}
+       
+</div>
+
+<script>
+  let pic = document.getElementsByClassName('movieposter');
+  pic[0].style.height = document.getElementsByClassName('movie__header')[0].scrollHeight + "px";
+ window.addEventListener('load', function () {
+  
+  loadActors();
+  loadCards();
+  });
+    </script> 
+           
+    {% endblock %}
+    

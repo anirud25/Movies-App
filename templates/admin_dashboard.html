@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% from "macros/gallery.html" import gallery %}
+{% from "macros/svgs.html" import star %}
+{% from "macros/tables.html" import tabular %}
+{% from "macros/datatable_imports.html" import style_imports %}
+{% block main_content %}
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie_details.css') }}" />
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+{# <link rel="stylesheet" href="{{ url_for('static', filename='css/cast_details.css') }}" />
+
+
+<h3 style="text-align:center; color: var(--accent-colour-dark)">Cast</h3>
+
+<div class="row">
+    
+  {% for m in movies %}
+    <div class="card" >
+      <img src="{{m.get('profile_path')}}"  onclick="openModal();currentSlide('{{loop.index}}')" class="hover-shadow cursor">
+    <div class="content">
+      <h4>{{m.get('name')}} </h4>
+      <p class="title" >{{m.get('character',0) or m.get('job')}}</p>
+    </div>
+    </div>
+    
+    {% endfor %}
+    {% set len = movies.__len__()%}
+</div>
+
+<div id="myModal" class="modal2">
+  
+  <div class="close2"  onclick="closeModal()">&times;</div>
+  <div class="modal-content2">
+
+    {% for m in movies %}
+    <div class="mySlides">
+      <div class="numbertext">{{loop.index}} / {{len}}</div>
+      <img src="{{m.get('profile_path')}}" class='popimg' alt="{{m.get('name')}}">
+    </div>
+    {% endfor %}
+    
+    
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+    <div class="caption-container">
+      <p id="caption" style="color: var(--accent-colour);"></p>
+    </div>
+
+    
+  </div>
+</div>
+
+
+{{gallery()}} #}
+
+
+
+<table id="data" class="table table-striped" style="color: var(--accent-colour) !important; table-layout: auto;">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Id</th>
+      <th>Movies</th>
+      <th>Ratings</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    {% for i,user in users.iterrows() %}
+      <tr style="color: var(--text-dark) !important;">
+        <td style="color: var(--text-dark) !important;">{{ user.email }}</td>
+        <td style="color: var(--text-dark) !important;">{{ user._id }}</td>
+        <td style="color: var(--text-dark) !important;">{% for u in user.movies %} {{u}} <br> {%endfor%}</td>
+        <td nowrap="nowrap">
+        {% for k,v in ratings.get(i).items() %} 
+          <span style="display: flex; color: var(--text-dark); column-gap: 1.2px;">
+            {{k}}{% for i in range(v|int) %}
+              {{ star("star star--filled") }}
+            {% endfor %}
+          </span>
+ 
+          <br>
+        {%endfor%}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{{tabular()}}
+{% endblock %}

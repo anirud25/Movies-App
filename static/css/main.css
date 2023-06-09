@@ -1,0 +1,1035 @@
+:root {
+  --text-dark: #000;
+  --text-light: #fbf2f2;
+  --text-muted: #595959;
+  --table-color: #b5b3b3;
+  --background-color: #fff;
+  
+  --accent-colour: #f56565;
+  --accent-colour-dark: #f23535;
+  --accent-colour-2: #3bb54a;
+  --accent-blur: #f565652d;
+  --tag-colour: #66F5F5;
+
+  --border: 3px solid #f23535;
+  --color-blur: rgba(251, 242, 242, 0.4);
+}
+
+:root.dark-mode {
+  --text-dark: #fbf2f2;
+  --text-light: rgb(32, 31, 31);
+  --text-muted: #c5c5c5;
+  --table-color: #0e0d0d;
+
+  /*--background-color: #1c2023;
+  --background: #1c2023;
+  --background: -webkit-linear-gradient(315deg, #1c2023 0%, #ffffff 74%);
+  --background-color: -webkit-linear-gradient(315deg, #1c2023 0%, #ffffff 74%);*/
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,1c1c1c+46,2b2b2b+59,2b2b2b+59,666666+88,666666+88 */
+--background: #000000; /* Old browsers */
+--background-color: linear-gradient(315deg, #1c2023 26%, #000000 74%);
+--filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#666666',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+  --accent-colour: gold;
+  --accent-colour-dark: #ffad00;
+  --accent-blur: #ecb3232d;
+  --accent-colour-2: #007BFF;
+  --tag-colour: var(--accent-colour-2);
+
+  --border: 3px solid gold;
+  --color-blur:  rgba(89, 89, 89, 0.4);
+  --background-repeat: no-repeat;
+  --background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+  
+  .button {
+    --background-color: #e2e8f0;
+    --background-color-hover: #bdd1eb;
+  }
+  
+  .form__field {
+    --background-color: #e8e5e5;
+      box-shadow: 0.25rem 0.45rem 8px -0.2rem #aaaaaa;
+  }
+  
+  .form__field,
+  .nav__link {
+    --border: 3px solid black;
+  }
+  
+  html {
+    /* Sets global font size on small devices */
+    font-size: 14px ;
+  }
+  /* The following media query increases the distance
+of the main content from the header as the
+window size increases. */
+@media screen and (min-width: 30em) {
+    .main {
+      padding-top: 0.5rem;
+      max-height: inherit;
+      
+    }
+  }
+  
+  /* When the screen width hits 960px, we increase the global font size to 14px. This changes
+     the scale of all of our relative units (the rems), keeping everything in proportion */
+  @media screen and (min-width: 60em) {
+    html {
+      font-size: 14px;
+    }
+  }
+  
+  /* When the screen width hits 1200px, we once again increase the global font size, this time to 16px */
+  @media screen and (min-width: 75em) {
+    html {
+      font-size: 18px;
+    }
+  }
+  
+  body {
+  
+    display: flex;
+    flex-direction: column;
+    /* Sets the shared font characteristics, so that that they can be inherited globally */
+    font-family: "Public Sans", sans-serif !important;
+    color: var(--text-dark) !important;
+    line-height: 1.45 !important;
+    background: var(--background-color) !important;
+    background-size: cover;
+    overflow: auto;
+    
+  }
+  
+  /* Button styles that we'll share across our site */
+  .button {
+    /* In order to easily position our buttons, we're making them block level elements */
+    display: block;
+  
+    /* Removes any outlines added when the button is in focus */
+    outline: none;
+  
+    /* Setting the cursor to pointer indicates to a user that the button is a clickable element */
+    cursor: pointer;
+  
+    /* Again, with buttons we have to be explicit about inheriting font properties */
+    font-size: inherit;
+    font-family: inherit;
+  
+    /* Slows the background colour change effect when we hover over the button, making
+         it take 0.1s with an accelerating colour change */
+    transition: background 0.1s ease-in;
+  }
+  
+  @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+  .search {
+    width: 100%;
+    display: flex;
+  }
+
+  
+  .searchTerm,
+  .searchTerm.off {
+    border: 3px solid var(--accent-colour);
+    border-right: none;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    background: var(--accent-blur);
+    display: flex;
+    width: 0%;
+    visibility: hidden;
+  }
+
+  .search:hover > .searchTerm, .searchTerm.on {
+    visibility: visible;
+    width: 90%;
+    padding-left: 5%;
+}
+
+.searchTerm::before, .searchTerm::after, .searchTerm.off::before, .searchTerm.off::after {
+  visibility: hidden;
+  width: 90%;
+}
+
+
+#ui-id-1, #customFilter > option {
+  text-align: center;
+  color: var(--text-light);
+  font: inherit !important;
+  border-radius: 0 0 20px 20px;
+  background: var(--accent-colour) !important;
+  border: 4px solid var(--accent-colour-dark);
+  overflow: hidden;
+}
+
+.ui-state-active {
+  border: 0px !important;
+  background: var(--accent-colour-dark) !important;
+  font-weight: 200;
+}
+
+.ui-state-active:hover
+{
+  border: 0px;
+  background: var(--accent-colour-dark) !important;
+  color: var(--text-dark) !important;
+  font-weight: 400;
+  text-decoration: solid;
+}
+  /* .ui-menu {
+    position: relative;
+    color: var(--text-light);
+    background: transparent !important;
+    border: none;
+  }
+
+  .ui-menu-item-wrapper {
+    background: var(--accent-colour);
+    padding-bottom: 2px;
+    border: none !important;
+  }
+
+  .ui-menu-item-wrapper:last-of-type:hover {
+    background: var(--accent-colour-dark) !important;
+    border-radius: 0 0 40px 40px;
+    padding-bottom: 2px;
+  } */
+
+
+.search:hover > .searchButton, .searchButton.on {
+    left: 0;
+    width: 10%;
+    background: var(--accent-colour-dark);
+    color: var(--text-dark);
+    border-radius: 0 20px 20px 0 !important;
+    border: 3px solid var(--accent-colour);
+    border-left: none;   
+}
+  
+  .searchTerm:focus {
+    color: var(--text-dark);
+  }
+  
+  ::placeholder { /* Most modern browsers support this now. */
+    color:    var(--text-dark);
+ }
+  .searchButton, .searchButton.off {
+  
+    left: 55%;
+    border: 3px solid var(--accent-colour-dark);
+    background: var(--accent-colour);
+    color: var(--text-light);
+    border-radius: 20px 20px 20px 20px;
+    cursor: pointer;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    
+  }
+  
+  
+  /*Resize the wrap to see the search bar change!*/
+  .wrap{
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 2em;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    height: 1em;
+    width: 25em;
+    
+  }
+
+
+  /* Utility class to use on links within text. */
+  .link {
+    text-decoration: none;
+    color: var(--accent-colour);
+    white-space: nowrap;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  .header {
+    padding-right: 1rem;
+    border-bottom: var(--border);
+  }
+  
+  .header__logo {
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .header__logo:hover {
+    color: var(--accent-colour);
+  }
+  
+  .logo__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .logo__name {
+    margin-left: 0rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+  
+    /* limits the width of the navigation area to 1200px and centres it within the header */
+    max-width: 75rem;
+    padding-right: 0%;
+    margin-right: auto;
+    font-size: 18px; 
+    line-height:1.5;
+  }
+  
+  .nav {
+    display: flex;
+  }
+  
+  .nav__link {
+    /* Setting display: flex and align-items: center places the links inside the list items
+         vertically in the center of the list item */
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+  
+    /* Removes standard underlines from these links. Explicitly inherits text colour from the body */
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Sets the background colour and text colour of our navigation items when the item has 
+     the .nav__link--active class, indicating the current page */
+  .nav__link--active {
+    background: var(--accent-colour);
+    color: var(--text-light);
+  }
+
+  .nav__link--active:hover {
+    color: var(--accent-colour-dark) !important;
+  }
+  
+  /* Adds 1 relative unit of padding (determined by font size) to the right margin of all .nav__item
+     elements as long as they are not the last element in their parent */
+  .nav__link:not(:last-child) {
+    margin-right: 0.25rem;
+  }
+ 
+  
+  /* Adds a bottom border and applies a negative margin to the element, to nudge it over the
+     existing header bar border */
+  .nav__link:hover {
+    margin-bottom: -2.5px;
+    border-bottom: solid var(--accent-colour-dark);
+    color: var(--accent-colour);
+  }
+
+ 
+  
+  .nav__item {
+    font-weight: 600;
+    padding-right: 0px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+ 
+  
+  /* Sets the size of the icon (light/dark theme toggle) to be the same as the font size
+      So that it takes up more or less the same amount of space as the links */
+  .nav__icon {
+    width: 2em;
+    height: 3em;
+  }
+
+  .footer {
+    padding: 0.5rem 0;
+    color: var(--text-dark);
+    border-top: solid var(--accent-colour);
+    text-align: center;
+    width: 100%;
+    opacity: 0.75;
+
+  }
+  .main {
+    flex-grow: 1;
+    background-size: cover;
+  
+  }
+
+  .form {
+    margin: 0 auto;
+    max-width: 30rem;
+    border: var(--border);
+    font-size: 1rem;
+  
+    /* An explicit background is required here, as it's actually transparent by default, and we
+         don't want to see the shadow element behind */
+    background: var(--background-color);
+    
+    /* This shadow is separated from the edges by 0.75rem, and shrunk by 0.2rem on the
+    top and bottom. */
+    box-shadow: 0.75rem 0.75rem 0.80rem -0.2rem var(--text-dark);
+    border-radius: 2em 2em 2em 2em !important;
+  }
+
+  .form__container {
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+  }
+  
+  /* The following media queries allow for more padding inside the form as the window
+     size increases */
+  @media screen and (min-width: 24.75em) {
+    .form__container {
+      padding-left: 2rem;
+    }
+  }
+  
+  @media screen and (min-width: 30em) {
+    .form__container {
+      padding-left: 2.5rem;
+    }
+  }
+
+  .form__group {
+    /* Surrounds the label and input fields, placing the label above the input */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+  }
+
+  input {
+    background-color: var(--color-blur);
+    color: var(--text-dark);
+  }
+  
+  .form__label {
+    margin-bottom: 0.5rem;
+  }
+
+  .form__field {
+  /* Removes the border and the outline highlight when the text field is in focus */
+  outline: none;
+  border: none;
+
+  /* Re-adds a bottom border which will be replaces when the field is in focus. This
+       is going to prevent any jumping when we add the border later */
+  border-bottom: 3px solid #fff;
+
+  /* We have to be explicit about our text fields inheriting font properties */
+  font-size: inherit;
+  font-family: inherit;
+
+  padding: 0.75rem 0.5rem;
+  background: var(--accent-blur) !important;
+}
+
+/* When the field is in focus, we change the border colour at the bottom to the accent colour */
+.form__field:focus {
+  border-bottom: var(--border);
+}
+
+.form__field {
+  /* Removes the border and the outline highlight when the text field is in focus */
+  outline: none;
+  border: none;
+
+  /* Re-adds a bottom border which will be replaces when the field is in focus. This
+       is going to prevent any jumping when we add the border later */
+  border-bottom: 3px solid #fff;
+
+  /* We have to be explicit about our text fields inheriting font properties */
+  font-size: inherit;
+  font-family: inherit;
+
+  padding: 0.25rem 0.25rem;
+  background: var(--accent-blur) !important;
+}
+
+/* When the field is in focus, we change the border colour at the bottom to the accent colour */
+.form__field:focus {
+  border-bottom: var(--border);
+}
+
+.form__small {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+.form__link {
+  text-decoration: none;
+  color: var(--accent-colour);
+}
+
+.form__link:hover {
+  color: #d05656;
+}
+
+.form__error {
+  margin-top: 0.5rem;
+}
+
+.form__error,
+.form__flash {
+  display: block;
+  padding: 0.5rem;
+  color: var(--text);
+}
+
+.form__error,
+.form__flash--danger {
+  background: var(--accent-colour);
+}
+
+.form__flash {
+  margin: 0.5rem;
+}
+
+.form__flash--success {
+  background: var(--accent-colour-2);
+}
+
+/* Styles specific to the form buttons */
+.button--form {
+  margin: 2rem 0 0 auto;
+  padding: 0.75rem 3rem;
+  border: none;
+  border-radius: 2em 2em 2em 2em;
+  background: var(--accent-colour);
+}
+
+.button--form:hover {
+  background: var(--accent-colour-dark);
+}
+
+.button--fav {
+  position: absolute;
+  bottom: 4rem;
+  right: 2rem;
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  border: var(--border);
+  border-radius: 50%;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 50em) {
+  .button--fav {
+    right: 3rem;
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .button--fav {
+    right: 4rem;
+  }
+}
+
+.button--fav:hover {
+  background-color: var(--accent-colour);
+  
+}
+
+.info{
+  position: relative;
+}
+
+.info:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  z-index: 99;
+  text-transform: uppercase;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: var(--accent-colour-dark);
+  color: var(--text-light);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 20px;
+  font-size: 10px;
+  /* Position the tooltip */
+  position: absolute;
+  text-transform: uppercase;
+  top: 120%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color:  transparent transparent var(--accent-colour) transparent;
+}
+
+
+
+.tg  {
+  max-width: 98%;
+  margin: 0 auto;
+  border-spacing: 0;
+  overflow-y: scroll; 
+  box-shadow: 0.75rem 0.75rem 8px -0.2rem #aaaaaa;
+  overflow-x: auto; 
+  
+  
+  border-radius: 20px 20px 20px 20px;
+  background: var(--table-color);
+}
+
+.tg td {font-family:Arial, sans-serif;font-size:14px;padding:0.5rem 1px;overflow:hidden;word-break:normal;border-bottom-width:1px; width: 5rem; }
+.tg th {font-family:Arial, sans-serif;font-size:14px;font-weight: normal;padding: 1.25rem 1px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#999;border-top-width:1px;border-bottom-width:1px;}
+.tg .tg-baqh {text-align:center;vertical-align:top; 
+  border-bottom: solid var(--text-dark)  3px;
+  text-transform: capitalize;
+  background: var(--table-color);
+  height: 2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  width: 750rem;
+}
+.tg .tg-yw4l {vertical-align:top; text-align:center; width:254px; background: var(--table-color);  color: var(--text-dark); border-style:solid;border-width:0px; border-bottom: solid var(--text-dark)  2px; padding: 1rem 5px; padding-right: 4px;}
+.tg .tg-6k2t {background-color: var(--table-color); color: var(--text-dark); vertical-align:top; text-align:center; max-width:50px; border-bottom: solid var(--text-dark)  2px; padding: 1rem 5px;}
+
+th.tg-sort-header::-moz-selection { background:transparent; }
+th.tg-sort-header::selection      { background:transparent; }
+th.tg-sort-header { cursor:pointer; }
+table th.tg-sort-header:after {  content:'';  border-width:0 5px 5px;  border-style:solid;  border-color:var(--accent-colour-dark) transparent;  visibility:hidden;  }
+table th.tg-sort-header:hover:after { position: relative; right: 1.5rem; visibility:visible;  }
+table th.tg-sort-desc:after,table th.tg-sort-asc:after,table th.tg-sort-asc:hover:after {position: relative; right: 1.5rem;  visibility:visible;  opacity:0.4;  }table th.tg-sort-desc:after {  border-bottom:none;  border-width:5px 5px 0;  }@media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}
+.tg a { color: inherit;
+  text-decoration: none;}
+
+.tg a:hover {
+  text-decoration: solid underline;
+}
+
+.table {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+  border-spacing: 0;
+  overflow-y: scroll; 
+  max-height:400rem;
+}
+
+.table__cell {
+  padding: 1.25rem 1rem;
+}
+
+.table__cell--header {
+  text-align: left;
+  padding: 0.5rem 1rem;
+  border-bottom: var(--border);
+  text-transform: capitalize;
+  background: var(--text-muted);
+  color: var(--accent-blur);
+ }
+
+.table__movieTitle {
+  font-weight: 600;
+}
+
+.table__movieOther {
+  font-size: 0.85em;
+}
+
+.table__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.table__link:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-colour);
+}
+
+.table__empty {
+  display: block;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+#w3button:hover {
+  color: var(--accent-colour) !important;
+  background: transparent !important;
+}
+
+#mySidebar {
+  background: var(--color-blur) !important;
+  color: var(--text-dark) !important;
+  border: 3px solid var(--accent-colour-dark);
+  border-radius: 0 25px 25px 0;
+
+}
+
+.w3-sidebar .w3-bar-item {
+  background: transparent !important;
+  color: var(--text-dark) !important;
+  z-index: 2;
+}
+
+.w3-sidebar .w3-bar-item:hover {
+  background: var(--accent-colour-dark) !important;
+  color: var(--text-dark) !important;
+  border: 2px solid var(--accent-colour-dark);
+}
+
+.w3-row-padding .w3-quarter {
+  border: solid 2px var(--accent-colour);
+  border-radius: 20px 20px 20px 20px;
+  padding: 0.75rem; 
+  width: 20%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: var(--accent-blur);
+  max-height: auto;
+ 
+}
+
+.w3-main {
+  padding: 0px;
+  width: inherit;  
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: var(--background-color);
+}
+
+.w3-quarter a {
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-justify:newspaper; 
+  
+}
+
+.w3-quarter h3 {
+  text-overflow: ellipsis;
+  max-height: 3em;
+  line-height: 1.2em;
+  font-size: 1.17em;
+  font-weight: normal;
+}
+
+
+#btnControl:checked + .trailer {
+  visibility: visible;
+}
+
+
+#modal {
+  position: fixed;
+  left: 10%;
+  top: 10%;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  display: none;
+  
+}
+
+#img_modal {
+  position: fixed;
+  left: 30%;
+  /*top: -4.5%;*/
+  top: 0;
+  max-height: 100%;
+  max-width: 100%;
+  z-index: 1;
+  display: none;
+  margin: 0;
+  height: 100%;
+  width: 83.5vh;
+}
+
+/* Modal Content (image) */
+.modal-content {
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+
+/* Add Animation */
+.modal-content {  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
+
+#poster:hover {opacity: 0.7;}
+
+.bg-image {
+  
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0%;
+  left: 0;
+  background: black;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.9);
+  overflow: auto;
+ 
+}
+
+.close {
+  position: relative;
+  left: 77.7%;
+  top: 4.5%;
+  border: 3px solid var(--accent-colour);
+  text-align: center;
+  color: var(--accent-colour);
+  font: 25px bold;
+  font-weight: 1000;
+  padding-bottom: 27px;
+  width: 30px;
+  height: 30px;
+  border-radius: 60px 60px 60px 60px;
+  cursor: pointer;
+  z-index: 100;
+
+}
+
+iframe {
+  width: 80%;
+  height: 80%;
+  border-radius: 20px 20px 20px 20px;
+  border: 2px solid var(--accent-colour);
+}
+
+.read-more-state-0,
+.read-more-state-1,
+.read-more-state-2,
+.read-more-state-3,
+.read-more-state-4,
+#post-1 {
+  display: none;
+}
+
+.read-more-target-0,
+.read-more-target-1,
+.read-more-target-2,
+.read-more-target-3,
+.read-more-target-4,
+#all-targets {
+  /*opacity: 0;
+  height: inherit;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;*/
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+  max-width: inherit;
+  display: none;
+}
+
+.read-more-state-0:checked ~ .read-more-wrap-0 .read-more-target-0, 
+.read-more-state-1:checked ~ .read-more-wrap-1 .read-more-target-1,
+.read-more-state-2:checked ~ .read-more-wrap-2 .read-more-target-2,
+.read-more-state-3:checked ~ .read-more-wrap-3 .read-more-target-3,
+.read-more-state-4:checked ~ .read-more-wrap-4 .read-more-target-4,
+#post-1:checked ~ #all-wraps #all-targets {
+  opacity: 1;
+  font-size: 0.85em;
+  max-height: 999em;
+  max-width: inherit;
+  text-align: left;
+}
+
+
+#read-more-label-0,
+#read-more-label-1,
+#read-more-label-2,
+#read-more-label-3,
+#read-more-label-4, 
+.all-labels {
+  cursor: pointer;
+  display: inline-block;
+  padding-left: 0.25em;
+  color: var(--accent-colour-dark);
+  font-size: 1.5em;
+  text-align: left;
+}
+
+/* Other style */ 
+ 
+div .read-more-wrap-0,
+div .read-more-wrap-1,
+div .read-more-wrap-2,
+div .read-more-wrap-3,
+div .read-more-wrap-4,
+#all-wraps {
+  padding: 2%;
+  white-space: normal;
+  color: var(--text-dark);
+  border: 1px solid var(--accent-colour-dark);
+  word-wrap: break-word;
+  border-radius: .25em;
+  display: block;
+  text-align: left;
+  font-size: medium;
+}
+
+.w3-gold {
+  background-color: var(--accent-colour-dark);
+  border-radius: 20px 20px 20px 20px;
+}
+
+.w3-gold:hover {
+  background: var(--accent-colour) !important;
+  border-radius: 20px 20px 20px 20px;
+}
+
+.w3-hover-gold:hover {
+  background-color: var(--accent-blur) !important;
+  border: 0.5px solid var(--accent-colour-dark);
+  border-radius: 20px 20px 20px 20px;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 6px;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--accent-colour); 
+  border-radius: 4px 4px 4px 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-colour-dark); 
+}
+
+.w3-container h3 {
+  padding: 0.1em 0.25em;
+  color: inherit !important;
+  border: 2px solid var(--accent-colour) !important;
+  background: var(--accent-blur);
+  border-radius: 20px 20px 20px 20px;
+}
+
+.dataTables_wrapper {
+  margin: 0 0.5%;
+  padding: 0.8em 0.6em;
+  color: inherit !important;
+  border: 2px solid var(--accent-blur) !important;
+  border-radius: 20px 20px 20px 20px;
+}
+
+#data td {
+
+  margin-left: 0 !important;
+}
+
+
+.form-control-sm {
+
+ opacity: 0.8 !important;
+ /*background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20px' width='80px'><text x='5' y='18' fill='gray' font-size='15'>Search..</text></svg>") !important;
+ background-repeat: no-repeat !important;*/
+}
+
+
+.form-select-sm {
+
+  opacity: 0.8 !important;
+}
+.form-control-sm:focus {
+  background-image: none !important;
+ }
+
+.dataTables_empty {
+  color: var(--accent-dark) !important;
+  opacity: 0.8 !important;
+}
+
+.page-link {
+  background: transparent !important;
+  color: var(--text-dark) !important;
+}
+
+.page-link:active {
+  background: var(--accent-colour) !important;
+  color: var(--text-light) !important;
+  border-color: var(--accent-colour) !important;
+}
+
+.dataTables_wrapper label {
+  opacity: 1 !important;
+}
+
+.dataTables_info {
+  opacity: 0.8 !important;
+}
+
+.main a:hover {
+  color: var(--accent-colour-dark) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--accent-colour-dark) !important;
+  text-decoration: none !important;
+}
+
+
